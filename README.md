@@ -10,7 +10,7 @@ What GIS Palette Editor can and can't do right now:
 * :x: Import palettes in formats other than IDRISI palette.
 * :x: Export palettes in formats other than IDRISI palette.
 
-
+[Try the GIS Palette Editor yourself!](http://app.o-gis.org/PaletteEditor/GIS_PaletteEditor.html)
 
 Authors:
 - Pavel Solovyev (solovyev.p.a@gmail.com)
