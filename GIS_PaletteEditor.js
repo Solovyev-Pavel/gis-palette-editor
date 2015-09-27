@@ -14,6 +14,10 @@
  *   See the License for the specific language governing permissions and      *
  *   limitations under the License.                                           *
  *  ************************************************************************* */
+ 
+/* ************************************************************************** *
+ *              Current version of the Palette Editor: v0.1                   *
+ *  ************************************************************************* */
 
 function PaletteEditor(){
     // Default DOM element in which the palette editor's grid is generated
@@ -28,6 +32,13 @@ function PaletteEditor(){
     // Holds the name of the function to be called when a grid cell is clicked
     // Unfortunately, this is necessary for the generated grid to work...
     this.grid_cell_onclick  = null;
+    // Palette Editor's current version
+    this.version            = 0.1;
+    
+    // Return the current version of the Palette Editor
+    this.getVersion = function(){
+        return "GIS Palette Editor, version " + this.version;
+    };
     
     // Set the name of the function to be called when a grid cell is clicked.
     // * f_name     -> name of the function to be called when a grid cell is clicked
