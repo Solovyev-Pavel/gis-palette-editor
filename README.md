@@ -6,7 +6,7 @@ What GIS Palette Editor can and can't do right now:
 * :heavy_check_mark: Import IDRISI palette files (*.smp).
 * :heavy_check_mark: Create new 256 colors palettes from scratch.
 * :heavy_check_mark: Export current palette as an IDRISI palette file (*.smp).
- * :x: Due to the method used for creating and saving files, export functionality currently **DOES NOT** work in Internet Explorer.
+ * :x: Due to the method used for saving client-side-generated files, export functionality currently **DOES NOT** work in Internet Explorer.
 * :x: Import palettes in formats other than IDRISI palette.
 * :x: Export palettes in formats other than IDRISI palette.
 
