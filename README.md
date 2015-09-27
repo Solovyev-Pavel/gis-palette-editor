@@ -1,6 +1,6 @@
 # gis-palette-editor
 
-GIS Palette Editor (v0.1) is a stand alone client-side browser application that can import, edit, and export 256 colors palettes used within Geographic Information Systems for adding colors to the raster layers. No addition javascript libraries are required for GIS Palette Editor to work.
+GIS Palette Editor (v0.1) is a standalone client-side browser application that can import, edit, and export 256 colors palettes used within Geographic Information Systems for adding colors to the raster layers. No addition javascript libraries are required for GIS Palette Editor to work.
 
 What GIS Palette Editor can and can't do right now:
 * :heavy_check_mark: Import IDRISI palette files (*.smp).
