@@ -31,7 +31,6 @@
             // This method initializes the Palette Editor on this web page
             function initializeGISPaletteEditor(){
                 palette_editor = new PaletteEditor();
-                //palette_editor.setVariableName('palette_editor');
                 palette_editor.setGridCellOnclickFunction('getCellColor');
                 palette_editor.generateGrid('palette-editor-container', 'palette-editor-cell');
             }
