@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<!--  Copyright © 2015      Pavel Solovyev (solovyev.p.a@gmail.com)            -->
+<!--                        Sergey Sevryukov (sevrukovs@gmail.com)             -->
+<!--                        Alexander Afonin (acer737@yandex.ru)               -->
+<!--                                                                           -->
+<!--  Licensed under the Apache License, Version 2.0 (the "License");          -->
+<!--  you may not use this file except in compliance with the License.         -->
+<!--  You may obtain a copy of the License at                                  -->
+<!--              http://www.apache.org/licenses/LICENSE-2.0                   -->
+<!--                                                                           -->
+<!--  Unless required by applicable law or agreed to in writing, software      -->
+<!--  distributed under the License is distributed on an "AS IS" BASIS,        -->
+<!--  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. -->
+<!--  See the License for the specific language governing permissions and      -->
+<!--  limitations under the License.                                           -->
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        
+        <title>GIS Palette Editor</title>
+        <link rel="stylesheet" href="GIS_PaletteEditor.css" />
+        <script type="text/javascript" src="GIS_PaletteEditor.js"></script>
+
+	      <script type="text/javascript">
+            var palette_editor = null;
+            var cell_being_edited = null;
+            
+            // This method initializes the Palette Editor on this web page
+            function initializeGISPaletteEditor(){
+                palette_editor = new PaletteEditor();
+                //palette_editor.setVariableName('palette_editor');
+                palette_editor.setGridCellOnclickFunction('getCellColor');
+                palette_editor.generateGrid('palette-editor-container', 'palette-editor-cell');
+            }
+            
+            // Function called when a grid cell is clicked
+            // This method must take only one parameter: the id of the clicked cell
+            function getCellColor(cell_id){
+                var color = palette_editor.getGridCellColor(cell_id, 'hex');
+                // Set the current select color of the color input.
+                // This action might need to be edited if alternative colorpicker is used.
+                document.getElementById('grid-cell-color-selector').value = color;
+                // Enable the color input if it isn't.
+                // This action might need to be edited/removed if alternative colorpicker is used.
+                document.getElementById('grid-cell-color-selector').disabled = false;
+                // Update the stored edited cell's id.
+                cell_being_edited = cell_id;
+                // Update the message displayer to the user.
+                document.getElementById('selected-grid-cell-message').textContent = 'Editing cell #' + cell_id;
+            }
+            
+            // Apply new color to a grid cell
+            function setCellColor(color){
+                // apply color...
+                palette_editor.setGridCellColor(cell_being_edited, color, 'hex');
+            }
+            
+            // Perform the Gradient fill of the grid cells
+            function doGradientFill(){
+                // Get the upper and lower limits of the fill range
+                var low = parseInt(document.getElementById('palette-editor-gfill-low').value);
+                var high = parseInt(document.getElementById('palette-editor-gfill-high').value);
+                // If lower limit is greater than higher - swap the values.
+                if (low > high){
+                    var tmp = low;
+                    low = high;
+                    high = tmp;
+                    document.getElementById('palette-editor-gfill-low').value = low;
+                    document.getElementById('palette-editor-gfill-high').value = high;
+                }
+                palette_editor.applyGradientFill(low, high);
+            }
+            
+            // Performs the Flood fill of the grid cells
+            function doFloodFill(){
+                // Get the upper and lower limits of the fill range
+                var low = parseInt(document.getElementById('palette-editor-ffill-low').value);
+                var high = parseInt(document.getElementById('palette-editor-ffill-high').value);
+                // If lower limit is greater than higher - swap the values.
+                if (low > high){
+                    var tmp = low;
+                    low = high;
+                    high = tmp;
+                }
+                // Get the id of the cell that is being used as the source of the flood fill color
+                var c_source = parseInt(document.getElementById('palette-editor-ffill-source').value);
+                palette_editor.applyFloodFill(low, high, c_source);
+            }
+            
+            // Resets the palette
+            function resetPaletteEditor(){
+                if(!confirm('Reset all cells to the default color?')){ return; }
+                document.getElementById('selected-grid-cell-message').textContent = 'Click on a grid cell to begin...';
+                palette_editor.resetPaletteEditorGrid();
+            }
+            
+            // Imports an IDRISI palette
+            function importIDRISIPalette(){
+                palette_editor.importIDRISIPaletteFile('SMP-palette-file-input');
+            }
+            
+            // Exports palette in IDRISI format
+            function exportPalette(){
+                palette_editor.exportToIDRISIPalette();
+            }
+	      </script>
+
+    </head>
+
+    <body class="body-full-page" onload="initializeGISPaletteEditor();">
+
+        <div class="page-title"><h1>GIS Palette Editor</h1></div>
+        
+        <div class="palette-editor-main-container">
+            <div id="palette-editor-container" class="palette-editor-cell-container"></div>
+            <div id="controls-container" class="palette-editor-controls-container">
+                <div class="palette-editor-controls-header">
+                    Select Grid Cell Color
+                </div>
+                <div class="palette-editor-controls-body">
+                    <!-- Standard color input can be replaced with any other, -->
+                    <!-- provided necessary adjustments to the code are made. -->
+                    <input type="color" id="grid-cell-color-selector" class="grid-cell-color-picker"
+                           onchange="setCellColor(this.value)" disabled="disabled"/>
+                    <p id="selected-grid-cell-message" >Click on a grid cell to begin...</p>
+                </div>
+                <div class="palette-editor-controls-header">
+                    Gradient Fill
+                </div>
+                <div class="palette-editor-controls-body">
+                    <table width="100%">
+                        <tr>
+                            <td width="50%">From cell:</td>
+                            <td>
+                                <input id="palette-editor-gfill-low" type="number" min="1" max="256" value="1" class="grid-cell-id-input" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>To cell:</td>
+                            <td>
+                                <input id="palette-editor-gfill-high" type="number" min="1" max="256" value="256" class="grid-cell-id-input" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>
+                                <button type="button" class="grid-cell-id-input" onclick="doGradientFill();">
+                                    Perform Gradient Fill
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="palette-editor-controls-header">
+                    Flood fill
+                </div>
+                <div class="palette-editor-controls-body">
+                    <table width="100%">
+                        <tr>
+                            <td width="50%">From cell:</td>
+                            <td>
+                                <input id="palette-editor-ffill-low" type="number" min="1" max="256" value="1" class="grid-cell-id-input" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>To cell:</td>
+                            <td>
+                                <input id="palette-editor-ffill-high" type="number" min="1" max="256" value="256" class="grid-cell-id-input" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Use the color of the cell:</td>
+                            <td>
+                                <input id="palette-editor-ffill-source" type="number" min="1" max="256" value="256" class="grid-cell-id-input" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>
+                                <button type="button" class="grid-cell-id-input" onclick="doFloodFill();">
+                                    Perform Flood Fill
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="palette-editor-controls-header">
+                    Reset Palette
+                </div>
+                <div class="palette-editor-controls-body">
+                    <table width="100%">
+                        <tr>
+                            <td width="50%">&nbsp;</td>
+                            <td>
+                                <button type="button" class="grid-cell-id-input" onclick="resetPaletteEditor();">
+                                    Reset Palette
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="palette-editor-controls-header">
+                    Import Palette
+                </div>
+                <div class="palette-editor-controls-body">
+                    <table width="100%">
+                        <tr>
+                            <td width="50%">
+                                <input type="file" id="SMP-palette-file-input" />
+                            </td>
+                            <td>
+                                <button type="button" id="SMP-palette-import" class="grid-cell-id-input"
+                                        onclick="importIDRISIPalette();">
+                                    Import IDRISI Palette
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="palette-editor-controls-header">
+                    Export Palette
+                </div>
+                <div class="palette-editor-controls-body">
+                    <table width="100%">
+                        <tr>
+                            <td width="50%">
+                                <b>WARNING</b>: Currently does not work in IE
+                            </td>
+                            <td>
+                                <button type="button" class="grid-cell-id-input" onclick="exportPalette();">
+                                    Export to IDRISI Palette
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+            
+        <br/>      
+        <center>© 2015</center>
+    </body>
+</html>
