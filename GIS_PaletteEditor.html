@@ -47,7 +47,7 @@
                 document.getElementById('grid-cell-color-selector').disabled = false;
                 // Update the stored edited cell's id.
                 cell_being_edited = cell_id;
-                // Update the message displayed to the user.
+                // Update the message displayer to the user.
                 document.getElementById('selected-grid-cell-message').textContent = 'Editing cell #' + cell_id;
             }
             
@@ -62,7 +62,7 @@
                 // Get the upper and lower limits of the fill range
                 var low = parseInt(document.getElementById('palette-editor-gfill-low').value);
                 var high = parseInt(document.getElementById('palette-editor-gfill-high').value);
-                // If the lower limit is greater than the higher one - swap their values.
+                // If lower limit is greater than higher - swap the values.
                 if (low > high){
                     var tmp = low;
                     low = high;
@@ -78,7 +78,7 @@
                 // Get the upper and lower limits of the fill range
                 var low = parseInt(document.getElementById('palette-editor-ffill-low').value);
                 var high = parseInt(document.getElementById('palette-editor-ffill-high').value);
-                // If the lower limit is greater than the higher one - swap their values.
+                // If lower limit is greater than higher - swap the values.
                 if (low > high){
                     var tmp = low;
                     low = high;
@@ -89,7 +89,7 @@
                 palette_editor.applyFloodFill(low, high, c_source);
             }
             
-            // Resets the palette: the colors of all grid cells are reverted to a default value
+            // Resets the palette
             function resetPaletteEditor(){
                 if(!confirm('Reset all cells to the default color?')){ return; }
                 document.getElementById('selected-grid-cell-message').textContent = 'Click on a grid cell to begin...';
@@ -134,13 +134,13 @@
                         <tr>
                             <td width="50%">From cell:</td>
                             <td>
-                                <input id="palette-editor-gfill-low" type="number" min="1" max="256" value="1" class="grid-cell-id-input" />
+                                <input id="palette-editor-gfill-low" type="number" min="0" max="255" value="0" class="grid-cell-id-input" />
                             </td>
                         </tr>
                         <tr>
                             <td>To cell:</td>
                             <td>
-                                <input id="palette-editor-gfill-high" type="number" min="1" max="256" value="256" class="grid-cell-id-input" />
+                                <input id="palette-editor-gfill-high" type="number" min="0" max="255" value="255" class="grid-cell-id-input" />
                             </td>
                         </tr>
                         <tr>
@@ -161,19 +161,19 @@
                         <tr>
                             <td width="50%">From cell:</td>
                             <td>
-                                <input id="palette-editor-ffill-low" type="number" min="1" max="256" value="1" class="grid-cell-id-input" />
+                                <input id="palette-editor-ffill-low" type="number" min="0" max="255" value="0" class="grid-cell-id-input" />
                             </td>
                         </tr>
                         <tr>
                             <td>To cell:</td>
                             <td>
-                                <input id="palette-editor-ffill-high" type="number" min="1" max="256" value="256" class="grid-cell-id-input" />
+                                <input id="palette-editor-ffill-high" type="number" min="0" max="255" value="255" class="grid-cell-id-input" />
                             </td>
                         </tr>
                         <tr>
                             <td>Use the color of the cell:</td>
                             <td>
-                                <input id="palette-editor-ffill-source" type="number" min="1" max="256" value="256" class="grid-cell-id-input" />
+                                <input id="palette-editor-ffill-source" type="number" min="0" max="255" value="255" class="grid-cell-id-input" />
                             </td>
                         </tr>
                         <tr>
