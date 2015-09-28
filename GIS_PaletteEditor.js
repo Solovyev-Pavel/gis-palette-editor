@@ -14,10 +14,6 @@
  *   See the License for the specific language governing permissions and      *
  *   limitations under the License.                                           *
  *  ************************************************************************* */
- 
-/* ************************************************************************** *
- *              Current version of the Palette Editor: v0.1                   *
- *  ************************************************************************* */
 
 function PaletteEditor(){
     // Default DOM element in which the palette editor's grid is generated
@@ -67,8 +63,8 @@ function PaletteEditor(){
         }
         // White is the default grid cell color.
         var bkg_color = this.default_grid_color;
-        // ids of the grid cells are in the range of [1; 256].
-        var cell_id = 1;
+        // ids of the grid cells are in the range of [0; 255].
+        var cell_id = 0;
         // Get the target DOM element.
         var target = document.getElementById(this.actual_grid_dom);
         // Check, whether this DOM element actually exists in the document;
@@ -79,7 +75,7 @@ function PaletteEditor(){
         }
         // Check, whether a function to be called when a grid cell is clicked is specified
         if (this.grid_cell_onclick === null){
-            window.alert("ERROR: function to be called when a grid cell is clicked isn't specified!");
+            window.alert('ERROR: function to be called when a grid cell is clicked isn\'t specified!');
             return;
         }
         for (var i = 0; i < 16; i++){
@@ -115,8 +111,8 @@ function PaletteEditor(){
         }
         // Check, whether the supplied cell_id is within the accepted range;
         // if it is not, default it to the edge values of the grid cell id range.
-        if (cell_id < 1){ cell_id = 1; }
-        if (cell_id > 256){ cell_id = 256; }
+        if (cell_id < 0){ cell_id = 0; }
+        if (cell_id > 255){ cell_id = 255; }
         // Get the current color of the targeted cell
         var color = document.getElementById('palette-grid-cell-' + cell_id).getAttribute('color');
         if (format === 'rgb'){ return color; }
@@ -140,8 +136,8 @@ function PaletteEditor(){
         }
         // Check, whether the supplied cell_id is within the accepted range;
         // if it is not, default it to the edge values of the grid cell id range.
-        if (cell_id < 1){ cell_id = 1; }
-        if (cell_id > 256){ cell_id = 256; }
+        if (cell_id < 0){ cell_id = 0; }
+        if (cell_id > 255){ cell_id = 255; }
         // if color is in 'hex' format, transform it into 'rgb' string
         if (format === 'hex'){
             color = this.convertToRGBstring(color);
@@ -189,7 +185,7 @@ function PaletteEditor(){
     
     // Resets all cells of the palette editor grid to the default color.
     this.resetPaletteEditorGrid = function(){
-        for (var i = 1; i <= 256; i++){
+        for (var i = 0; i < 256; i++){
             document.getElementById('palette-grid-cell-' + i).setAttribute('color', this.default_grid_color);
             document.getElementById('palette-grid-cell-' + i).setAttribute('style', 'background:' + this.default_grid_color + ';');
         }
@@ -241,8 +237,8 @@ function PaletteEditor(){
                     b = text[i * 3 + 20].charCodeAt(0);
                     color = 'rgb(' + r + ',' + g + ',' + b + ')';
                     // Apply the color
-                    document.getElementById('palette-grid-cell-' + (i + 1)).setAttribute('color', color);
-                    document.getElementById('palette-grid-cell-' + (i + 1)).setAttribute('style', 'background:' + color + ';');
+                    document.getElementById('palette-grid-cell-' + i).setAttribute('color', color);
+                    document.getElementById('palette-grid-cell-' + i).setAttribute('style', 'background:' + color + ';');
                 }
             };
         })(file);
@@ -264,7 +260,7 @@ function PaletteEditor(){
             byteView[i] = IDRISI[i];
         }
         for (var i = 0; i < 256; i++){
-            color_string = document.getElementById('palette-grid-cell-' + (i + 1)).getAttribute('color');
+            color_string = document.getElementById('palette-grid-cell-' + i).getAttribute('color');
             color_components = color_string.substring(4, color_string.length - 1).split(',');
             byteView[i * 3 + 18] = color_components[0] & 0xff;
             byteView[i * 3 + 19] = color_components[1] & 0xff;
